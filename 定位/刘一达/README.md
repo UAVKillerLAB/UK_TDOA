@@ -25,3 +25,13 @@
 - 5.实际结果
 - 6.原因分析
 - 7.下一步工作
+
+# 公式示例
+
+
+$\hat{X}_{m+1}=X_{m}+\left(G^{T} M^{-1} G\right)^{-1} G^{T} M^{-1}\left(D-f\left(X_{0}\right)\right)$
+$\delta_{m+1}=\hat{X}_{m+1}-X_{m}$
+
+
+
+
