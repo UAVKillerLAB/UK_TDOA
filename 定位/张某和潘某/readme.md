@@ -21,14 +21,8 @@
 - 1.代码原理
     代码采用chan算法和泰勒算法联用，chan算法通过将双曲线方程组转化为线性方程组，并借助其他变量的方式得到目标位置的解析解。
     主接受站S0（x0，y0，z0），辅助观测站S1（x1,y1,z1）,S2(x2,y2,z2),S3(x3,y3,z3)。
-$$
-\left\{\begin{array}{l}
-{r_{0}=\sqrt{\left(x-x_{0}\right)^{2}+\left(y-y_{0}\right)^{2}+\left(z-z_{0}\right)^{2}}} \\
-{r_{i}=\sqrt{\left(x-x_{i}\right)^{2}+\left(y-y_{i}\right)^{2}+\left(z-z_{i}\right)^{2}} \quad(i=1,2,3,4)} \\
-{r_{i 0}=r_{i}-r_{0}=c \cdot \Delta t_{i}}
-\end{array}\right.
-$$
-\end{array}\right.
+http://latex.codecogs.com/gif.latex?%24%24%20%5Cleft%5C%7B%5Cbegin%7Barray%7D%7Bl%7D%20%7Br_%7B0%7D%3D%5Csqrt%7B%5Cleft%28x-x_%7B0%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28y-y_%7B0%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28z-z_%7B0%7D%5Cright%29%5E%7B2%7D%7D%7D%20%5C%5C%20%7Br_%7Bi%7D%3D%5Csqrt%7B%5Cleft%28x-x_%7Bi%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28y-y_%7Bi%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28z-z_%7Bi%7D%5Cright%29%5E%7B2%7D%7D%20%5Cquad%28i%3D1%2C2%2C3%2C4%29%7D%20%5C%5C%20%7Br_%7Bi%200%7D%3Dr_%7Bi%7D-r_%7B0%7D%3Dc%20%5Ccdot%20%5CDelta%20t_%7Bi%7D%7D%20%5Cend%7Barray%7D%5Cright.%20%24%24
+
     其中▲ti为到第i站与到主站产生的时差，以上三式即为定位方程。
     将方程整理可以得到：
     % MathType!MTEF!2!1!+-
