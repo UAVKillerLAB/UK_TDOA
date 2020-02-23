@@ -23,7 +23,7 @@
     主接受站S0（x0，y0，z0），辅助观测站S1（x1,y1,z1）,S2(x2,y2,z2),S3(x3,y3,z3)。
 http://latex.codecogs.com/gif.latex?%24%24%20%5Cleft%5C%7B%5Cbegin%7Barray%7D%7Bl%7D%20%7Br_%7B0%7D%3D%5Csqrt%7B%5Cleft%28x-x_%7B0%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28y-y_%7B0%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28z-z_%7B0%7D%5Cright%29%5E%7B2%7D%7D%7D%20%5C%5C%20%7Br_%7Bi%7D%3D%5Csqrt%7B%5Cleft%28x-x_%7Bi%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28y-y_%7Bi%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28z-z_%7Bi%7D%5Cright%29%5E%7B2%7D%7D%20%5Cquad%28i%3D1%2C2%2C3%2C4%29%7D%20%5C%5C%20%7Br_%7Bi%200%7D%3Dr_%7Bi%7D-r_%7B0%7D%3Dc%20%5Ccdot%20%5CDelta%20t_%7Bi%7D%7D%20%5Cend%7Barray%7D%5Cright.%20%24%24
 
-    其中：▲ti为到第i站与到主站产生的时差，以上三式即为定位方程。
+    其中▲ti为到第i站与到主站产生的时差，以上三式即为定位方程。
     将方程整理可以得到：
     % MathType!MTEF!2!1!+-
 % feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
