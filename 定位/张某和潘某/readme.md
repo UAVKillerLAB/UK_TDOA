@@ -40,7 +40,7 @@
     http://latex.codecogs.com/gif.latex?%5Cdelta%3D%5Cleft%5B%5Cbegin%7Barray%7D%7Blll%7D%20%7B%5CDelta%20x%7D%20%26%20%7B%5CDelta%20y%7D%20%26%20%7B%5CDelta%20z%7D%20%5Cend%7Barray%7D%5Cright%5D%5E%7B%5Cmathrm%7BT%7D%7D%3D%5Cleft%28%5Cboldsymbol%7BG%7D%5E%7BT%7D%20%5Cboldsymbol%7BQ%7D%20%5Cboldsymbol%7BG%7D%5Cright%29%5E%7B-1%7D%20%5Cboldsymbol%7BG%7D%5E%7BT%7D%20Q%20%5Cboldsymbol%7Bh%7D
     其中：
     http://latex.codecogs.com/gif.latex?Q%3DE%5Cleft%5Be%20e%5E%7BT%7D%5Cright%5D
-    最后再将
+    最后再将：
     http://latex.codecogs.com/gif.latex?%5Ctext%20%7B%20If%20%7D%20%5Csqrt%7B%5CDelta%20x%5E%7B2%7D&plus;%5CDelta%20y%5E%7B2%7D&plus;%5CDelta%20z%5E%7B2%7D%7D
     与预设阈值进行比较，如果大于阈值，则继续循环执行上诉步骤，如果小于等于阈值则退出循环得到当前坐标值
 - 2.代码接口定义
