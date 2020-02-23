@@ -21,10 +21,13 @@
 - 1.代码原理
     代码采用chan算法和泰勒算法联用，chan算法通过将双曲线方程组转化为线性方程组，并借助其他变量的方式得到目标位置的解析解。
     主接受站S0（x0，y0，z0），辅助观测站S1（x1,y1,z1）,S2(x2,y2,z2),S3(x3,y3,z3)。
+$$
 \left\{\begin{array}{l}
 {r_{0}=\sqrt{\left(x-x_{0}\right)^{2}+\left(y-y_{0}\right)^{2}+\left(z-z_{0}\right)^{2}}} \\
 {r_{i}=\sqrt{\left(x-x_{i}\right)^{2}+\left(y-y_{i}\right)^{2}+\left(z-z_{i}\right)^{2}} \quad(i=1,2,3,4)} \\
 {r_{i 0}=r_{i}-r_{0}=c \cdot \Delta t_{i}}
+\end{array}\right.
+$$
 \end{array}\right.
     其中▲ti为到第i站与到主站产生的时差，以上三式即为定位方程。
     将方程整理可以得到：
