@@ -21,30 +21,11 @@
 - 1.代码原理
     代码采用chan算法和泰勒算法联用，chan算法通过将双曲线方程组转化为线性方程组，并借助其他变量的方式得到目标位置的解析解。
     主接受站S0（x0，y0，z0），辅助观测站S1（x1,y1,z1）,S2(x2,y2,z2),S3(x3,y3,z3)。
-% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakqaabeqaaiaabkhaliaaicdakiabg2da9maa
-% kaaabaGaaiikaiaadIhacqGHsislcaWG4bWccaaIWaGccaGGPaWaaW
-% baaSqabeaacaaIYaaaaOGaey4kaSIaaiikaiaadMhacqGHsislcaWG
-% 5bWccaaIWaGccaGGPaWaaWbaaSqabeaacaaIYaaaaOGaey4kaSIaai
-% ikaiaadQhacqGHsislcaWG6bWccaaIWaGccaGGPaWaaWbaaSqabeaa
-% caaIYaaaaaqabaaakeaacaqGYbWccaWGPbGccqGH9aqpdaGcaaqaai
-% aacIcacaWG4bGaeyOeI0IaamiEaSGaamyAaOGaaiykamaaCaaaleqa
-% baGaaGOmaaaakiabgUcaRiaacIcacaWG5bGaeyOeI0IaamyEaSGaam
-% yAaOGaaiykamaaCaaaleqabaGaaGOmaaaakiabgUcaRiaacIcacaWG
-% 6bGaeyOeI0IaamOEaSGaamyAaOGaaiykamaaCaaaleqabaGaaGOmaa
-% aaaeqaaaGcbaGaamOCaSGaamyAaiaaicdakiabg2da9iaadkhaliaa
-% dMgakiabgkHiTiaadkhaliaaicdakiabg2da9iaadogacqGHflY1cq
-% GHuoarcaqG0bWccaWGPbaaaaa!7D44!
-\[\begin{array}{l}
-{\rm{r}}0 = \sqrt {{{(x - x0)}^2} + {{(y - y0)}^2} + {{(z - z0)}^2}} \\
-{\rm{r}}i = \sqrt {{{(x - xi)}^2} + {{(y - yi)}^2} + {{(z - zi)}^2}} \\
-ri0 = ri - r0 = c \cdot \Delta {\rm{t}}i
-\end{array}\]
+\left\{\begin{array}{l}
+{r_{0}=\sqrt{\left(x-x_{0}\right)^{2}+\left(y-y_{0}\right)^{2}+\left(z-z_{0}\right)^{2}}} \\
+{r_{i}=\sqrt{\left(x-x_{i}\right)^{2}+\left(y-y_{i}\right)^{2}+\left(z-z_{i}\right)^{2}} \quad(i=1,2,3,4)} \\
+{r_{i 0}=r_{i}-r_{0}=c \cdot \Delta t_{i}}
+\end{array}\right.
     其中▲ti为到第i站与到主站产生的时差，以上三式即为定位方程。
     将方程整理可以得到：
     % MathType!MTEF!2!1!+-
