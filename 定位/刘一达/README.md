@@ -28,10 +28,10 @@
 
 # 公式示例
 
+![](http://latex.codecogs.com/gif.latex?%24%5Cmathbf%7BP%7D_%7Bk%20%7C%20k%7D%3D%5Cleft%28%5Cmathbf%7BI%7D-%5Cmathbf%7BK%7D_%7Bk%7D%20%5Cmathbf%7Bg%7D_%7B%5Cmathbf%7Bi%7D%7D%5Cleft%28%5Cmathbf%7Bz%7D_%7Bk%7D%2C%20%5Chat%7B%5Cmathbf%7Bx%7D%7D_%7Bk%7D%5Cright%29%5Cright%29%20%5Cmathbf%7BP%7D_%7Bk%20%7C%20k-1%7D%5Cleft%28%5Cmathbf%7BI%7D-%5Cmathbf%7BK%7D_%7Bk%7D%20%5Cmathbf%7Bg%7D_%7B%5Cmathbf%7Bi%7D%7D%5Cleft%28%5Cmathbf%7Bz%7D_%7Bk%7D%2C%20%5Chat%7B%5Cmathbf%7Bx%7D%7D_%7Bk%7D%5Cright%29%5Cright%29%5E%7BT%7D&plus;%5Cmathbf%7BK%7D_%7Bk%7D%20%5Cmathbf%7BR%7D_%7Bk%7D%20%5Cmathbf%7BK%7D_%7Bk%7D%5E%7BT%7D%24)
 
-$\hat{X}_{m+1}=X_{m}+\left(G^{T} M^{-1} G\right)^{-1} G^{T} M^{-1}\left(D-f\left(X_{0}\right)\right)$
-$\delta_{m+1}=\hat{X}_{m+1}-X_{m}$
-
-
+- 1.使用 [Mathpix Snipping Tool](https://mathpix.com/) 识别公式
+- 2.在 [CodeCogs Equation Editor](http://latex.codecogs.com/) 线上生成图片然后在 Markdown 文件中插入图片链接
+![](https://tding.top/archives/22f997b6/1.png)
 
 
