@@ -27,7 +27,7 @@ for i in range(1,N+1,1):
 Xkf = zeros(2, N)
 Xkf[:, 1] = X[:, 1]
 P0 = eye(2)
-
+# 算法更新
 for i in range(2,N):
     Xn = A*Xkf[:, i-1]
     P1 = A*P0*A.T+Q
