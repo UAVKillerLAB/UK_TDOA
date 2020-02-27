@@ -34,7 +34,8 @@ Q = dat*np.eye(3, dtype = int)
 # print('Q=',Q)
 TSOA = math.sqrt(10)
 TDOA = math.sqrt(10)
-W = np.sqrt(Q)*random.randn(3, 1)
+# W = np.sqrt(Q)*random.randn(3, 1)
+W = np.square(Q)*random.randn(3, 1)
 # print('W=',W)
 R = np.diag([TDOA, TDOA, TDOA])
 # print('R=',R)
@@ -47,18 +48,6 @@ G = np.array([[T*T/2.0, 0, 0],
 def  h_pre(x):
     global T, BS1, BS2, BS3, BSb
     # 距离公式
-    # #输入三个数据，X（1）、X（2）、X（3）
-    # print('输入X（1）：')
-    # x1 = float(input())
-    # print('输入X（2）：')
-    # x2 = float(input())
-    # print('输入X（3）：')
-    # x3 = float(input())
-    # x = np.zeros((1, 6))
-    # x[:, 0] = x1
-    # x[:, 1] = x2
-    # x[:, 2] = x3
-    # #print('x = ',x)
     h1 = np.zeros((1, 3))
     h1[:, 0] = math.sqrt((x[0] - BS1[0])**2 + (x[1] - BS1[1])**2 + (x[2] - BS1[2]**2))
     h1[:, 1] = math.sqrt((x[0] - BS2[0])**2 + (x[1] - BS2[1])**2 + (x[2] - BS2[2]**2))
@@ -69,12 +58,15 @@ def  h_pre(x):
     f = np.array([x[0] + T*x[3]], [x[1] + T*x[4]], [x[2] + T*x[5]], [x[3]], [x[4]], [x[5]])
 
 # 状态方程，目标轨迹
-# while 2<=t<=N:
-#     x[:, 1] = A*x[:, t-1]
-#     t=t + 1
-
+for i in range(1, N):
+    x[:, i:i + 1] = A*x[:, i - 1:i]
+# print(x)
 #观测方程，，目标观测
-# while  1<=t<=N
+# for i in range(1, N):
+#     def h_pre(x):
+#     Z[:, i:i+1] = h*x[:, i:i+1]
+# print(Z)
+
 
 L = 6
 alpha = 0.3 #可调节
