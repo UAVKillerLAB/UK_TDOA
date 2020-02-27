@@ -5,19 +5,17 @@ import random
 from numpy import random
 from numpy import *
 from numpy.linalg import*
-#
+# from numpy import mat
+
 T = 1
 N = 5
 x = np.zeros((6, N))
 
 #目标的初始位置
-x[:,0] = ([[100], [200], [100], [4], [8], [0.5]])
-
+x[:,0] = ([100, 200, 100, 4, 8, 0.5])
 # print(X)
-
 Z = np.zeros((3, N))
 h = np.zeros((3, N))
-
 #状态转换矩阵
 A =np.matrix([[1,0,0,T,0,0],
               [0,1,0,0,T,0],
@@ -26,10 +24,10 @@ A =np.matrix([[1,0,0,T,0,0],
               [0,0,0,0,1,0],
               [0,0,0,0,0,1]])
 
-BS1 = np.mat([[3000], [100], [20]])
-BS2 = np.mat([[200], [3000], [50]])
-BS3 = np.mat([[300], [400], [3000]])
-BSb = np.mat([[450], [-200], [100]])
+BS1 = np.mat([3000, 100, 20])
+BS2 = np.mat([200, 3000, 50])
+BS3 = np.mat([300, 400, 3000])
+BSb = np.mat([450, -200, 100])
 
 dat = 1.35
 Q = dat*np.eye(3, dtype = int)
@@ -84,18 +82,16 @@ kalpha = 0.54
 belta = 2 #高斯分布通常2为最优100
 lamada = alpha**2*(L + kalpha) - L
 c =  L + lamada
-
-###########明天修改~~~~
-# Wm1 = np.zeros((1, 2*L))
-# Wm2 = np.zeros((1, 2*L))
-# Wm2[:, 0] = lamada/2.0
-# Wm2[:, 1:2*L] = c/2.0
-# print('Wm1 =',Wm1,'Wm2 =',Wm2)
-# Wm = Wm1 + Wm2
-
-
+# Wm = mat(zeros((1, 2*L+1)))  :可用：from numpy import mat  实现
+Wm = np.zeros((1, 2*L+1))
+Wm[:, 0] = lamada/c
+Wm[:, 1:2*L+1] = 1/(2*c)
+# print('Wm = ',Wm)
 Wc = Wm
-# Wc[:, 0] = Wc[0] + (1-alpha**2 + belta)
+# Wc[:, 0] =  Wc[0] + (1-alpha**2 + belta)  :Wc[0]的提取方式是错的  既然前面赋值的是第一行第一个，
+#                                            那么提出来应该也是一行第一个，所以是Wc[:,0]
+Wc[:, 0] =  Wc[:,0] + (1-alpha**2 + belta)
+# print('Wc = ',Wc)
 Xukf = np.zeros((6, N))
 Xukf[:, 0] = x[:, 0]
 P0 = np.eye(6, dtype = float)
