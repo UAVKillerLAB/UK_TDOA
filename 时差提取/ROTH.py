@@ -1,44 +1,49 @@
 # clear; clc;close all;
 import numpy as np
 import matplotlib.pyplot as plt
-import matlab
+
+def wgn (x, snr):
+  P_signal = np.sum(abs(x) ** 2) / len(x)
+  P_noise = P_signal / 10 ** (snr / 10.0)
+  return np.random.randn(len(x)) * np.sqrt(P_noise)
 
 
-def wgn(x, snr): #加噪函数
-    snr = 10 ** (snr / 10.0)
-    xpower = np.sum(x ** 2) / len(x)
-    npower = xpower / snr
-    return np.random.randn(len(x)) * np.sqrt(npower)
-
-
-N = 2048 #采样点
-FS = 500 #采样频率
-SNR = 10 #信噪比设置
+N = 1024   # 采样点
+FS = 10000  # 采样频率
+SNR = 20 # 信噪比设置
 
 n = np.arange(0, N - 1)
-x1 = 5 * np.cos(2 * np.pi * 10 * n / FS) #输入函数1
-x1 = wgn(x1, SNR)
-x2 = 5 * np.cos(2 * np.pi * 10 * (n + 6) / FS) #输入函数2
-x2 = wgn(x2, SNR)
+d = 6
+x1 = 5 * np.cos(2 * np.pi * 10 * n / FS)  # 输入函数1
+noise1 = wgn(x1, SNR)
+s1 = x1 + noise1
+x2 = 5 * np.cos(2 * np.pi * 10 * (n + d) / FS)  # 输入函数2
+noise2 = wgn(x2, SNR)
+s2 = x2 + noise2
 
-X1 = np.fft.fft(x1, 2 * N - 1) #快速傅里叶正变换处理
-X2 = np.fft.fft(x2, 2 * N - 1)
-Sxy = X1 * np.conj(X2) #取x1和x2的互相关函数
-R11 = X1 * np.conj(X1) #取x1的自相关函数
-RH = np.fft.ifftshift(np.fft.ifft(Sxy / R11)) #ROTH加权处理
-t1 = np.arange(-N, N - 1) / FS
+X1 = np.fft.fft(s1, 2 * N - 1)  # 快速傅里叶正变换处理
+X2 = np.fft.fft(s2, 2 * N - 1)
+Sxy = X1 * np.conj(X2)  # 取x1和x2的互相关函数
 
-#以下为画图操作
-plt.plot(t1, RH, )
-plt.title('ROTH加权')
+PA = np.fft.fftshift(np.fft.ifft(Sxy/(abs(Sxy))))
+PA = PA.real
+
+t1 = np.arange(-N+1, N) / FS
+
+
+# 以下为画图操作
+plt.plot(t1, PA,'r')
+plt.title('PHAT')
 plt.xlabel('t/s')
-plt.ylabel('RH(t)')
+plt.ylabel('PA(t)')
 
-max2 = RH.argmax()
-RH_list = list(RH)
-dis2 = RH_list.index(max(RH_list)) #取峰值
+
+RH_list = list(PA)
+dis2 = RH_list.index(max(RH_list)) # 取峰值
+k = max(RH_list)
+
 d2 = dis2 - N
-delay = d2 / FS #时延估计
+delay = d2 / FS  # 时延估计
+
 print(delay)
 plt.show()
-print(delay)
