@@ -4,7 +4,7 @@ SampleLen           = 1e7;                  %采样点数
 %备注：得到的信号无人机为解调过后的信号，主要频率为8Mhz-25Mhz -->采样频率设定为200Mhz
 %%
 %以大端方式读取指定路径的bin文件
-fid=fopen('信号.bin','r+');
+fid=fopen('signals.bin','r+');
 signal = fread(fid,'int16','l');            %此处数据类型需要为int16，为int8会出错
 %以int16的格式将数据存放在列向量中
 fclose(fid);%关闭文件             
