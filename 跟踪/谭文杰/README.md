@@ -20,7 +20,7 @@
 - 1.代码原理
   代码采用矢量卡尔曼（二维）的算法
   对于从主站得到的位置信息，对它进行物理模型的建立，
-  ![]（https://github.com/cannercan/-/blob/master/th.jpg?raw=true）
+  ![]（https://github.com/cannercan/-/raw/master/th.jpg?raw=true）
 - 2.代码接口定义（需要说明的输入输出变量等）
 - 3.代码流程
 - 4.预期结果
