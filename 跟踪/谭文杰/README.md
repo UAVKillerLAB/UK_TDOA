@@ -24,7 +24,7 @@
   初始化各种数据，例如各种噪声的影响。
   接下来就是进行先验估计和后验估计的计算了，然后再计算出K值
   再接下来就是进行迭代计算了，可以参考下面的图解
-  ![](https://github.com/cannercan/-/raw/master/th.jpg?raw=true)
+  ![](https://github.com/cannercan/-/raw/master/th.jpg)
 - 2.代码接口定义（需要说明的输入输出变量等）
   输入：无人机当前的位置信息 输出：无人机下一刻的坐标估计值
 - 3.代码流程
