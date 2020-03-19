@@ -36,7 +36,7 @@ for i in range(1, N+1, 1):
     P0 = (eye(2)-K*H)*P1
 
 plt.figure()
-plt.plot(Xkf, Xkf, 'ro', markersize=0.1)
-plt.plot(X, X, 'bo', markersize=1)
-print(Xkf)
+plt.plot(Xkf[0, :], Xkf[1, :], 'r+', markersize=10)
+plt.plot(X[0, :], X[1, :], 'bo', markersize=1)
+plt.plot(Z[0, :], Z[1, :], 'g-', markersize=2)
 plt.show()
