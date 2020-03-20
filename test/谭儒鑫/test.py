@@ -1,1 +1,0 @@
-print('This is a test code by Trx!')
