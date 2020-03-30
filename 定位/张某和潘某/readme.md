@@ -20,171 +20,43 @@
 ### 2. 项目源码简要说明
 - 1.代码原理
     代码采用chan算法和泰勒算法联用，chan算法通过将双曲线方程组转化为线性方程组，并借助其他变量的方式得到目标位置的解析解。
-    主接受站S0（x0，y0，z0），辅助观测站S1（x1,y1,z1）,S2(x2,y2,z2),S3(x3,y3,z3)。
-% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakqaabeqaaiaabkhaliaaicdakiabg2da9maa
-% kaaabaGaaiikaiaadIhacqGHsislcaWG4bWccaaIWaGccaGGPaWaaW
-% baaSqabeaacaaIYaaaaOGaey4kaSIaaiikaiaadMhacqGHsislcaWG
-% 5bWccaaIWaGccaGGPaWaaWbaaSqabeaacaaIYaaaaOGaey4kaSIaai
-% ikaiaadQhacqGHsislcaWG6bWccaaIWaGccaGGPaWaaWbaaSqabeaa
-% caaIYaaaaaqabaaakeaacaqGYbWccaWGPbGccqGH9aqpdaGcaaqaai
-% aacIcacaWG4bGaeyOeI0IaamiEaSGaamyAaOGaaiykamaaCaaaleqa
-% baGaaGOmaaaakiabgUcaRiaacIcacaWG5bGaeyOeI0IaamyEaSGaam
-% yAaOGaaiykamaaCaaaleqabaGaaGOmaaaakiabgUcaRiaacIcacaWG
-% 6bGaeyOeI0IaamOEaSGaamyAaOGaaiykamaaCaaaleqabaGaaGOmaa
-% aaaeqaaaGcbaGaamOCaSGaamyAaiaaicdakiabg2da9iaadkhaliaa
-% dMgakiabgkHiTiaadkhaliaaicdakiabg2da9iaadogacqGHflY1cq
-% GHuoarcaqG0bWccaWGPbaaaaa!7D44!
-\[\begin{array}{l}
-{\rm{r}}0 = \sqrt {{{(x - x0)}^2} + {{(y - y0)}^2} + {{(z - z0)}^2}} \\
-{\rm{r}}i = \sqrt {{{(x - xi)}^2} + {{(y - yi)}^2} + {{(z - zi)}^2}} \\
-ri0 = ri - r0 = c \cdot \Delta {\rm{t}}i
-\end{array}\]
-    其中▲ti为到第i站与到主站产生的时差，以上三式即为定位方程。
-    将方程整理可以得到：
-    % MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaacaGGOaGaamiEaSGaaGimaOGaeyOeI0Ia
-% amiEaSGaamyAaOGaaiykaiaadIhacqGHRaWkcaGGOaGaamyEaSGaaG
-% imaOGaeyOeI0IaamyEaSGaamyAaOGaaiykaiaadMhacqGHRaWkcaGG
-% OaGaamOEaSGaaGimaOGaeyOeI0IaamOEaSGaamyAaOGaaiykaiaadQ
-% hacqGH9aqpcaWGRbWccaWGPbGccqGHRaWkcaWGYbWccaaIWaGccqGH
-% flY1cqGHuoarcaWGYbWccaWGPbaaaa!615E!
-\[(x0 - xi)x + (y0 - yi)y + (z0 - zi)z = ki + r0 \cdot \Delta ri\]
-    其中，% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaacaWGRbWccaWGPbGccqGH9aqpdaWcaaqa
-% aiaaigdaaeaacaaIYaaaaiaacUfacqGHuoarcaWGYbWccaWGPbGcda
-% ahaaWcbeqaaiaaikdaaaGccqGHRaWkcaGGOaGaamiEaSGaaGimaOWa
-% aWbaaSqabeaacaaIYaaaaOGaey4kaSIaamyEaSGaaGimaOWaaWbaaS
-% qabeaacaaIYaaaaOGaey4kaSIaamOEaSGaaGimaOWaaWbaaSqabeaa
-% caaIYaaaaOGaaiykaiabgkHiTiaacIcacaWG4bWccaWGPbGcdaahaa
-% WcbeqaaiaaikdaaaGccqGHRaWkcaWG5bWccaWGPbGcdaahaaWcbeqa
-% aiaaikdaaaGccqGHRaWkcaWG6bWccaWGPbGcdaahaaWcbeqaaiaaik
-% daaaGccaGGPaGaaiyxaaaa!62DB!
-\[ki = \frac{1}{2}[\Delta r{i^2} + (x{0^2} + y{0^2} + z{0^2}) - (x{i^2} + y{i^2} + z{i^2})]\]
-    可以得到以下矩阵：AX=F
-    其中A=% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaafaqabeWadaaabaGaamiEaSGaaGimaiaa
-% igdaaOqaaiaadMhaliaaicdacaaIXaaakeaacaWG6bWccaaIWaGaaG
-% ymaaGcbaGaamiEaSGaaGimaiaaikdaaOqaaiaadMhaliaaicdacaaI
-% YaaakeaacaWG6bWccaaIWaGaaGOmaaGcbaGaamiEaSGaaGimaiaaio
-% daaOqaaiaadMhaliaaicdacaaIZaaakeaacaWG6bWccaaIWaGaaG4m
-% aaaaaaa!5600!
-\[\begin{array}{*{20}{c}}
-{x01}&{y01}&{z01}\\
-{x02}&{y02}&{z02}\\
-{x03}&{y03}&{z03}
-\end{array}\]，x0i=x0-xi,y01=y0-yi,z0i=z0-zi;
-    X=% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaafaqabeWabaaabaGaamiEaaqaaiaadMha
-% aeaacaWG6baaaaaa!422B!
-\[\begin{array}{*{20}{c}}
-x\\
-y\\
-z
-\end{array}\],F=% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaafaqabeWabaaabaGaam4AaSGaaGymaOGa
-% ey4kaSIaamOCaSGaaGimaOGaeyyXICTaeyiLdqKaamOCaSGaaGymaa
-% GcbaGaam4AaSGaaGOmaOGaey4kaSIaamOCaSGaaGimaOGaeyyXICTa
-% eyiLdqKaamOCaSGaaGOmaaGcbaGaam4AaSGaaG4maOGaey4kaSIaam
-% OCaSGaaGimaOGaeyyXICTaeyiLdqKaamOCaSGaaG4maaaaaaa!5CCD!
-\[\begin{array}{*{20}{c}}
-{k1 + r0 \cdot \Delta r1}\\
-{k2 + r0 \cdot \Delta r2}\\
-{k3 + r0 \cdot \Delta r3}
-\end{array}\]。
-    利用伪逆法得到X的最小二乘解为：
-    % MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaacaWGybGaeyypa0Jaaiikaiaadgeadaah
-% aaWcbeqaaiaadsfaaaGccaWGbbGaaiykamaaCaaaleqabaGaeyOeI0
-% IaaGymaaaakiaadgeadaahaaWcbeqaaiaadsfaaaGccaWGgbaaaa!497A!
-\[X = {({A^T}A)^{ - 1}}{A^T}F\]
-    令% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakeaacaGGOaGaamyqamaaCaaaleqabaGaamiv
-% aaaakiaadgeacaGGPaWaaWbaaSqabeaacqGHsislcaaIXaaaaOGaam
-% yqamaaCaaaleqabaGaamivaaaakiabg2da9iaacUfacaWGHbWccaWG
-% PbGaamOAaOGaaiyxaSGaaG4maiaacQcacaaIZaaaaa!4E9D!
-\[{({A^T}A)^{ - 1}}{A^T} = [aij]3*3\]
-    则方程组解为:% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakqaabeqaaiaadIhacqGH9aqpcaWGTbWccaaI
-% XaGccqGHRaWkcaWGUbWccaaIXaGccqGHflY1caWGYbWccaaIWaaake
-% aacaWG4bGaeyypa0JaamyBaSGaaGOmaOGaey4kaSIaamOBaSGaaGOm
-% aOGaeyyXICTaamOCaSGaaGimaaGcbaGaamiEaiabg2da9iaad2gali
-% aaiodakiabgUcaRiaad6galiaaiodakiabgwSixlaadkhaliaaicda
-% aaaa!5E94!
-\[\begin{array}{l}
-x = m1 + n1 \cdot r0\\
-x = m2 + n2 \cdot r0\\
-x = m3 + n3 \cdot r0
-\end{array}\]
-    其中：% MathType!MTEF!2!1!+-
-% feaagKart1ev2aaatCvAUfeBSn0BKvguHDwzZbqefSSZmxoarmWu51
-% MyVXgatCvAUfeBSjuyZL2yd9gzLbvyNv2CaeHbd9wDYLwzYbItLDha
-% ryavP1wzZbItLDhis9wBH5garqqtubsr4rNCHbGeaGqiVu0Je9sqqr
-% pepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9vqaqpepm0xbba9pwe9Q8fs
-% 0-yqaqpepae9pg0FirpepeKkFr0xfr-xfr-xb9adbaqaaeGaciGaai
-% aabeqaamaaeaqbaeaakqaabeqaaiaad2galiaadMgacqGH9aqpdaae
-% WbqaaOGaamyyaSGaamyAaiaadQgakiabgwSixlaadUgaliaadQgaaW
-% qaaiaadQgacqGH9aqpcaaIXaaabaGaaG4maaGdcqGHris5aaGcbaGa
-% amOBaSGaamyAaiabg2da9maaqahabaGccaWGHbWccaWGPbGaamOAaO
-% GaeyyXICTaeyiLdqKaamOCaSGaamOAaaadbaGaamOAaiabg2da9iaa
-% igdaaeaacaaIZaaaoiabggHiLdaaaaa!6012!
-\[\begin{array}{l}
-mi = \sum\limits_{j = 1}^3 {aij \cdot kj} \\
-ni = \sum\limits_{j = 1}^3 {aij \cdot \Delta rj} 
-\end{array}\]
-    并将上式代入原始定位式即可得到一个二次方程，利用求根公式即可求得此解。
-    泰勒算法需要一个预估定位，该位置可由chan算法计算得到的定位提供，泰勒算法的基本思想是将时差看作是目标位置的函数，通过对其级数展开并利用关系式构造线性方程组，解算出无人机坐标坐标，再差值向量，然后进一步迭代，直到达到预设阈值之后方可退出迭代，即可得到当前迭代出的坐标。
 
+    主接受站S0（x0，y0，z0），辅助观测站S1（x1,y1,z1）,S2(x2,y2,z2),S3(x3,y3,z3)。
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20%5Cleft%5C%7B%5Cbegin%7Barray%7D%7Bl%7D%20%7Br_%7B0%7D%3D%5Csqrt%7B%5Cleft%28x-x_%7B0%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28y-y_%7B0%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28z-z_%7B0%7D%5Cright%29%5E%7B2%7D%7D%7D%20%5C%5C%20%7Br_%7Bi%7D%3D%5Csqrt%7B%5Cleft%28x-x_%7Bi%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28y-y_%7Bi%7D%5Cright%29%5E%7B2%7D&plus;%5Cleft%28z-z_%7Bi%7D%5Cright%29%5E%7B2%7D%7D%20%5Cquad%28i%3D1%2C2%2C3%2C4%29%7D%20%5C%5C%20%7Br_%7Bi%200%7D%3Dr_%7Bi%7D-r_%7B0%7D%3Dc%20%5Ccdot%20%5CDelta%20t_%7Bi%7D%7D%20%5Cend%7Barray%7D%5Cright.%20%24%24)
+
+    采用chan算法对上诉方程式求解可以得到以下关系式：
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20%5Chat%7BX%7D%3D%5Cleft%28A%5E%7BT%7D%20A%5Cright%29%5E%7B-1%7D%20A%5E%7BT%7D%20F%20%24%24)
+
+    其中：
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20%5Chat%7BX%7D%3D%5Cleft%28A%5E%7BT%7D%20A%5Cright%29%5E%7B-1%7D%20A%5E%7BT%7D%20F%20%24%24)
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20A%3D%5Cleft%5B%5Cbegin%7Barray%7D%7Blll%7D%20%7Bx_%7B01%7D%7D%20%26%20%7By_%7B01%7D%7D%20%26%20%7Bz_%7B01%7D%7D%20%5C%5C%20%7Bx_%7B02%7D%7D%20%26%20%7By_%7B02%7D%7D%20%26%20%7Bz_%7B02%7D%7D%20%5C%5C%20%7Bx_%7B03%7D%7D%20%26%20%7By_%7B03%7D%7D%20%26%20%7Bz_%7B03%7D%7D%20%5C%5C%20%7Bx_%7B04%7D%7D%20%26%20%7By_%7B04%7D%7D%20%26%20%7Bz_%7B04%7D%7D%20%5Cend%7Barray%7D%5Cright%5D%2C%20%5Cquad%20x_%7B0%20i%7D%3Dx_%7B0%7D-x_%7Bi%7D%2C%20%5Cquad%20y_%7B0%20i%7D%3Dy_%7B0%7D-y_%7Bi%7D%2C%20%5Cquad%20z_%7B0%20i%7D%3Dz_%7B0%7D-z_%7Bi%7D%20%24%24)
+
+    泰勒算法需要一个预估定位，该位置可由chan算法计算得到的定位提供，泰勒算法的基本思想是将时差看作是目标位置的函数，通过对其级数展开并利用关系式构造线性方程组，解算出无人机坐标坐标，再差值向量，然后进一步迭代，直到达到预设阈值之后方可退出迭代，即可得到当前迭代出的坐标。
+    首先先将chan算法所得到的定位带入定位方程中进行泰勒展开得到下式：
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20%5Chat%7BX%7D%3D%5Cleft%28A%5E%7BT%7D%20A%5Cright%29%5E%7B-1%7D%20A%5E%7BT%7D%20F%20%24%24)
+
+    其中：
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20e%3D%5Cleft%5B%5Cbegin%7Barray%7D%7Blll%7D%20%7Be_%7B1%7D%7D%20%26%20%7Be_%7B2%7D%7D%20%26%20%7Be_%7B3%7D%7D%20%5Cend%7Barray%7D%5Cright%5D%5E%7B%5Cmathrm%7BT%7D%7D%20%24%24)
+
+    上式代表时间测量误差，下式代表目标估计误差：
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20%5Cdelta%3D%5Cleft%5B%5Cbegin%7Barray%7D%7Blll%7D%20%7B%5CDelta%20x%7D%20%26%20%7B%5CDelta%20y%7D%20%26%20%7B%5CDelta%20z%7D%20%5Cend%7Barray%7D%5Cright%5D%5E%7B%5Cmathrm%7BT%7D%7D%20%24%24)
+
+    该式代表辐射源到目标真实值与测量值之差：
+    ![](http://latex.codecogs.com/gif.latex?%24%24%20%5Cboldsymbol%7Bh%7D%3D%5Cleft%5B%5CDelta%20R_%7B1%7D-%5Cleft%28R_%7B1%7D-R_%7B0%7D%5Cright%29%20%5CDelta%20R_%7B2%7D-%5Cleft%28R_%7B2%7D-R_%7B0%7D%5Cright%29%20%5CDelta%20R_%7B3%7D-%5Cleft%28R_%7B3%7D-R_%7B0%7D%5Cright%29%5Cright%5D%5E%7B%5Cmathrm%7BT%7D%7D%20%24%24)
+
+    再利用最小二乘法可以得到：
+    ![](http://latex.codecogs.com/gif.latex?%5Cdelta%3D%5Cleft%5B%5Cbegin%7Barray%7D%7Blll%7D%20%7B%5CDelta%20x%7D%20%26%20%7B%5CDelta%20y%7D%20%26%20%7B%5CDelta%20z%7D%20%5Cend%7Barray%7D%5Cright%5D%5E%7B%5Cmathrm%7BT%7D%7D%3D%5Cleft%28%5Cboldsymbol%7BG%7D%5E%7BT%7D%20%5Cboldsymbol%7BQ%7D%20%5Cboldsymbol%7BG%7D%5Cright%29%5E%7B-1%7D%20%5Cboldsymbol%7BG%7D%5E%7BT%7D%20Q%20%5Cboldsymbol%7Bh%7D)
+
+    其中：
+    ![](http://latex.codecogs.com/gif.latex?Q%3DE%5Cleft%5Be%20e%5E%7BT%7D%5Cright%5D)
+
+    最后再将：
+    ![](http://latex.codecogs.com/gif.latex?%5Ctext%20%7B%20If%20%7D%20%5Csqrt%7B%5CDelta%20x%5E%7B2%7D&plus;%5CDelta%20y%5E%7B2%7D&plus;%5CDelta%20z%5E%7B2%7D%7D)
+
+    与预设阈值进行比较，如果大于阈值，则继续循环执行上诉步骤，如果小于等于阈值则退出循环得到当前坐标值
 - 2.代码接口定义
     输入：时差（三站两个时差，四站三个时差），输出：无人机坐标以及坐标图（需要说明的输入输出变量等）
 - 3.代码流程
-mermaid
-graph LR
    输入时差 -->得到定位方程-->方程线性化求解-->得到坐标-->泰勒迭代达到阈值-->跟新当前坐标-->绘图描点坐标 
 - 4.预期结果
     输出定位坐标，并且生成无人机坐标图
