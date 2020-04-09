@@ -16,47 +16,12 @@ SNR = 20  # 信噪比设置
 n = np.arange(0, N - 1)
 d = 6
 x1 = 5 * np.cos(2 * np.pi * 10 * n / FS)  # 输入函数1
-# noise1 = wgn(x1, SNR)
-# s1 = x1 + noise1
+noise1 = wgn(x1, SNR)
+s1 = x1 + noise1
 x2 = 5 * np.cos(2 * np.pi * 10 * (n + d) / FS)  # 输入函数2
-# noise2 = wgn(x2, SNR)
-# s2 = x2 + noise2
+noise2 = wgn(x2, SNR)
+s2 = x2 + noise2
 
-x1 = list(x1)
-x2 = list(x2)
-Ts = 1 / FS
-Ta = np.arange(0, Ts * N, Ts / 10)
-
-
-fa = list(range(0 , len(Ta)))
-i = 0
-for i in fa:
-    fa[i] = 0
-
-fb = list(range(0 , len(Ta)))
-i = 0
-for i in fb:
-    fb[i] = 0
-
-T = np.arange(0, len(Ta) - 1)
-k = np.arange(0, Ts * N, Ts)
-t = np.arange(0, len(k) - 1)
-
-for Tx in T:
-    for tx in t:
-        fa[Tx] = fa[Tx] + x1[tx] * np.sinc((Tx / 10 - tx))
-
-for Tx in T:
-    for tx in t:
-        fb[Tx] = fb[Tx] + x2[tx] * np.sinc((Tx / 10 - d - tx))
-
-fa = np.array(fa)
-fb = np.array(fb)
-
-noise1 = wgn(fa, SNR)
-noise2 = wgn(fb, SNR)
-s1 = fa + noise1
-s2 = fb + noise2
 
 X1 = np.fft.fft(s1, 2 * N - 1)  # 快速傅里叶正变换处理
 X2 = np.fft.fft(s2, 2 * N - 1)
