@@ -1,0 +1,101 @@
+
+from scipy import signal
+from scipy.fftpack import fft ,ifft
+import matplotlib.pyplot as plt
+import numpy as np
+'''
+本代码为FIR带通滤波器
+窗口函数为firwin()-->备注:使用此函数会使获得的频率略大于希望的频率
+无人机信号为4M-13M的基带信号
+滤波后为数十Khz的窄带信号
+
+关键变量说明：
+sampling_rate----采样频率
+fft_size---------取样长度
+fpassdown--------带通下限
+fpassup----------带通上限
+t----------------第1张坐标图上的X轴，时间
+signal_raw-------第1张坐标图上的Y轴，时间信号
+freqs------------第2,3张坐标图上的X轴，频率
+yf---------------第2张坐标图上的Y轴，原始信号的频率
+filtered---------第3张坐标图上的Y轴，滤波的频率信号
+
+'''
+
+#采样频率和采样长度(参数设定)---------------------------------
+sampling_rate = 2e8                         #采样频率为2e8Hz
+fft_size = 1000000                          #FFT处理的取样长度
+#带通滤波器的上下限**********
+fpassdown = 1e7                             #希望获得的带通下限
+fpassup = 1.001e7                           #希望获得的带通上限
+#通过计算获得的上下限(无需更改)
+fpass1 = (4*fpassdown)/sampling_rate      #计算后带通下限
+fpass2 = (4*fpassup)/sampling_rate        #计算后带通上限
+
+#原始信号解码----------------------------------------------
+signal_raw = np.fromfile("信号.bin",dtype = np.int16)             #读取信号文件的数据格式为16位
+t = np.linspace(0, 1e8, 10000000, False)                         #生成时间信号
+#原始信号x，y轴
+freqs = np.linspace(0, sampling_rate/2, int(fft_size/2+1))       #坐标x轴的频率生成
+xs = signal_raw[:len(freqs)]                                     #从数据中取样fft_size/2个点进行运算
+yf = abs(np.fft.fft(xs))/fft_size                                #对x轴的频率进行频谱变换
+
+#滤波部分--------------------------------------------------
+h4=signal.firwin(15000, [fpass1, fpass2], pass_zero=False)      #生成滤波器
+filtered1 = signal.oaconvolve(xs, h4)                           #将信号和滤波器做卷积，获得滤波后的信号
+filtered= abs(np.fft.fft(filtered1))/fft_size                   #对滤波后的信号进行频谱分析
+
+#绘图部分--------------------------------------------------
+fig, (ax1, ax2 , ax3 ) = plt.subplots(3, 1, sharex=True)         #创建三张图标
+
+ax1.plot(t, signal_raw)
+ax1.set_title("无人机信号时间谱")
+
+ax2.plot(freqs, 20*np.log10(np.abs(yf)))
+ax2.set_title("无人机原始信号频谱")
+ax2.axis([0, 5e7 , 0 ,50])
+
+ax3.plot(freqs, 20*np.log10(np.abs(filtered[:len(freqs)])))
+ax3.set_title("无人机滤波信号频谱")
+ax3.axis([0, 5e7,0 ,50])
+
+plt.rcParams['font.sans-serif']=['SimHei']                  #显示中文标签
+plt.rcParams['axes.unicode_minus'] = False                  #显示负号标签
+plt.show()
+#---------------------------------------------
+
+
+
+
+#已经可用remez函数生成滤波器且效果更佳，但是但是具体使用尚不明晰(滤波系数无法获得)
+#将上面的代码全部注释以后即可查看remez函数生成滤波器
+'''
+from scipy import signal
+import matplotlib.pyplot as plt
+import numpy as np
+sampling_rate = 2e8#采样频率为2e8Hz
+fstrat = 0
+fstop1 = 0.99e7/sampling_rate   #截止下限
+fpass1 = 1e7/sampling_rate      #带通下限
+fpass2 = 1.001e7/sampling_rate  #带通下限
+fstop2 = 1.002e7/sampling_rate  #截止上限
+fstop  = 0.5
+
+h4 = signal.remez(200, (fstrat, fstop1, fpass1, fpass2, fstop2, fstop), (0.001, 1, 0.001))
+
+w, h = signal.freqz(h4, 1)
+# filtered = signal.filtfilt(w, h , signal_raw)
+
+plt.plot(w/(2*np.pi), 20*np.log10(np.abs(h)))
+
+plt.rcParams['font.sans-serif']=['SimHei'] #显示中文标签
+plt.rcParams['axes.unicode_minus'] = False
+plt.legend()
+plt.xlabel(u"正规化频率 周期/取样")
+plt.ylabel(u"幅值(dB)")
+plt.title(u"带通滤波器效果图")
+plt.show()
+print(h.shape)
+'''
+
+
