@@ -1,4 +1,5 @@
 # clear; clc;close all;
+#注意，本代码目前的内容是仿真PHAT加权法而不是原来的ROTH，具体原因详见readme
 import numpy as np
 import matplotlib.pyplot as plt
 
