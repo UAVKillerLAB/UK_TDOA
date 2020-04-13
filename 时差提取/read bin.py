@@ -23,11 +23,12 @@ if __name__ == '__main__':
         t.append(i/fs)
     y1 = np.array(need) / max(map(abs, need)) # 归一化
 
-    x1 = need[2350:N + 2349] # 主要信号
+    x1 = need[2350:N + 2349] # 主站信号
 
     SNR = 20
-    D  = 6.04635194728013e-07
-    D1 = -1.966503114547034e-07
+    # 输入接口数值
+    D  = 5.323635820946877e-07  # 基站1延时点数
+    D1 = 1.0282142542749676e-06 # 基站2延时点数
 
     N1 = D  / (1 / fs)
     N2 = D1 / (1 / fs)
@@ -76,9 +77,9 @@ if __name__ == '__main__':
 
     dis13 = R13_list.index(max(R13_list))  # 取峰值
     d13 = dis13 - N
-
-    Delay12 = d12 / fs  # 时延估计
-    Delay13 = d13 / fs
+    # 输出接口值
+    Delay12 = d12 / fs  # 主站和基站1的时差值
+    Delay13 = d13 / fs  # 主站和基站2的时差值
 
     if Delay12 * D < 0:
         Delay12 = -Delay12
