@@ -16,8 +16,8 @@ n = np.arange(0, N - 1)
 
 # 参数设定
 D1 = 0 # 主站延时点数
-D2 = 6 # 基站1延时点数
-D3 = 8 # 基站2延时点数
+D2 = 6.04635194728013e-07 # 基站1延时点数
+D3 = -1.966503114547034e-07 # 基站2延时点数
 
 A1 = 5 # 主站信号幅值
 A2 = 5 # 基站1信号幅值
@@ -48,10 +48,10 @@ S12 = X1 * np.conj(X2)  # 取X1和X2的互相关函数
 S13 = X1 * np.conj(X3)
 
 
-PA12 = np.fft.fftshift(np.fft.ifft(S12 / (abs(S12))))
+PA12 = np.fft.fftshift(np.fft.ifft(S12 / (abs(S12 + np.spacing(1)))))
 PA12 = PA12.real
 
-PA13 = np.fft.fftshift(np.fft.ifft(S13 / (abs(S13))))
+PA13 = np.fft.fftshift(np.fft.ifft(S13 / (abs(S13 + np.spacing(1)))))
 PA13 = PA13.real
 
 
