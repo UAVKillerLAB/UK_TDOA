@@ -1,4 +1,5 @@
 #此程序操作说明：运行，输入目标坐标，要修改基站坐标请在标记处修改（下文有标记），输出定位坐标和图像
+
 import numpy as np
 import math
 import matplotlib.pyplot as plt
@@ -7,6 +8,7 @@ from numpy import random
 from numpy import *
 from numpy.linalg import*
 #                                   以下为三站定位部分
+print('提示，当前代码版本需要输入5次时差')
 X = list([
     [0, 26],
     [28, 29],
