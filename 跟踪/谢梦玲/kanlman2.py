@@ -6,137 +6,72 @@ from numpy import random
 from numpy import *
 from numpy.linalg import*
 
-Zs = zeros((3, 100))  # 目标到三个基站的距离
-h = zeros((3, 100))  # 最终的预测方程算出来的坐标
-Z = zeros((3, 100))  # 目标到主基站的距离
 
-BS1 = np.mat([3000, 100, 20])
-BS2 = np.mat([200, 3000, 50])
-BS3 = np.mat([300, 400, 3000])
 
-BSb = np.mat([0, 0, 0])
-#计算距离
-def Z_pre(X):
-    # print('X[0, 1]:',X[0, 1])
-    global Zs, h, Z
-    global BS1, BS2, BS3, BSb
+#接收定位数据
+D = list([
+        # [99.99999302, 99.99999335],
+        # [149.99998931, 149.99999005],
+        # [199.99998549, 199.99998677],
+        # [249.99998157, 249.99998353],
+        # [299.99997757, 299.99998034],
+    [0, 0],
+    [65.76493554, 34.23505767],
+    [100, 100],
+    [65.76493532, 145.76493059],
+    [-5.87629289e-15, 1.99999987e+02],
+    ])
+N = len(D)#计算定位数据的长度，用于算法的计算次数
+S = np.matrix(D)#将其转化为矩阵，便于接下来的运算
+#相关矩阵初始化
+A = np.mat([[1, 0], [0, 1]])#转移矩阵，用来描述传入坐标的轨迹
+B = np.mat([[0.5], [1]])#加速度矩阵，暂时不用，设定为匀速运动
+H = np.mat([[1, 0], [0, 1]])#预测转移矩阵，用来描述理想轨迹
 
-    # #改为列处理
-    # Zs[:, 0] = sqrt((X[0, 0] - BS1[0, 0]) ** 2 + (X[0, 1] - BS1[0, 1]) ** 2 + (X[0, 2] - BS1[0, 2]) ** 2)
-    # Zs[:, 1] = sqrt((X[0, 1] - BS2[0, 1]) ** 2 + (X[0, 1] - BS2[0, 1]) ** 2 + (X[0, 2] - BS2[0, 2]) ** 2)
-    # Zs[:, 2] = sqrt((X[0, 2] - BS3[0, 2]) ** 2 + (X[0, 2] - BS3[0, 2]) ** 2 + (X[0, 2] - BS3[0, 2]) ** 2)
-    # Z[:, 0] = sqrt((X[0, 0] - BSb[0, 0]) ** 2 + (X[0, 1] - BSb[0, 1]) ** 2 + (X[0, 2] - BSb[0, 2]) ** 2)
-    # Z[:, 1] = sqrt((X[0, 0] - BSb[0, 1]) ** 2 + (X[0, 1] - BSb[0, 1]) ** 2 + (X[0, 2] - BSb[0, 2]) ** 2)
-    # Z[:, 2] = sqrt((X[0, 0] - BSb[0, 0]) ** 2 + (X[0, 1] - BSb[0, 1]) ** 2 + (X[0, 2] - BSb[0, 2]) ** 2)
-    # h[:, 0] = Zs[:, 0] - Z[:, 0]
-    # h[:, 1] = Zs[:, 1] - Z[:, 1]
-    # h[:, 2] = Zs[:, 2] - Z[:, 2]
-    # return h
+# print('H=', H)
+#噪声的初始化
+Q = np.mat([[1, 0], [0, 1]])
+R = np.mat([[10, 1], [1, 5]])
+# print('R=', R)
+# print('Q=', Q)
+random2 = np.random.randn(2, N) #生成2xN的随机整数矩阵
+W = np.dot(np.sqrt(Q), random2) #对矩阵进行求方根使用numpy库
+V = np.dot(np.sqrt(R), random2)
 
-n = 5
-t = 1
-X = np.zeros((6, n))
-X[:, 0:1] = np.mat([[100], [200], [100], [4], [8], [0.5]])
-Z = np.zeros((3, n))
-h = np.zeros((3, n))
-A = np.mat([[1, 0, 0, t, 0, 0],
-           [0, 1, 0, 0, t, 0],
-           [0, 0, 1, 0, 0, t],
-           [0, 0, 0, 1, 0, 0],
-           [0, 0, 0, 0, 1, 0],
-           [0, 0, 0, 0, 0, 1]])
+X = np.zeros((2, N))
+# print('s=', S.shape)
+for i in range(0, N, 1):
+    X[:, i] = S[i, :] #传入的坐标
+P0 = np.mat([[1, 1], [1, 1]])#协方差矩阵
+Z = np.zeros((2, N))#预测无人机的矩阵
+Z[:, 0] = [X[0, 0], X[1, 0]] #观测初始化，将第一个传入坐标定为第一个预测坐标
+Xkf = np.zeros((2, N))
+Xkf[:, 0:1] = X[:, 0:1]#初始化的滤波坐标
+I = np.identity(2)
+for i in range(1, N, 1):
+    Z[:, i:i+1] = H*X[:, i:i+1]+V[:, i:i+1]#预测的无人机轨迹坐标
+for i in range(1, N, 1):
+    X_pre = A*Xkf[:, i-1:i]
+    P_pre = A*P0*A.T+Q
 
-dat = 1.35
-r = np.array([1, 1, 1])
-G = np.mat([[t**2/2, 0, 0],
-           [0, t**2/2, 0],
-           [0, 0, t**2/2],
-           [t, 0, 0],
-           [0, t, 0],
-           [0, 0, t]])
-Q = dat*np.diag(r)
-TSOA = math.sqrt(10)
-TDOA = math.sqrt(10)
-random2 = random.randn(3, 1)
-W = sqrt(Q)*random2
+    Kg = P_pre*H.T*inv(H*P_pre*H.T+R)
+    Xkf[:, i:i+1] = X_pre+Kg*(Z[:, i:i+1]-H*X_pre)
+    P0 = (I-Kg*H)*P_pre
+print('Xkf=', Xkf)
 
-L = 6
-alpha = 0.3#可以调节 改变均值
-kalpha = 0.54
-belta = 2#对高斯分布通常是2最优100 可以改变方差
-lamada = alpha*alpha*(L+kalpha)-L
-c = L+lamada
-Wm = [lamada/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c, 0.5/c]
-Wc = Wm
-Wc[0] = Wc[0]+(1-alpha**2+belta)
-c = sqrt(c)
-xsP1 = zeros((6, 6))
-xsP2 = zeros((6, 6))
-xsP11 = zeros((6, 6))
-xsP22 = zeros((6, 6))
-ZS = zeros((3, n))
-Xukf = zeros((6, n))
-Xukf[:, 1] = X[:, 1]
-P0 = eye(6)
-c = sqrt(c)
-for i in range(1, n):
-    X[:, i:i+1] = A * X[:, i - 1:i] #状态方程，目标轨迹
-print('X', X)
-Z = Z_pre(Z)
-print('Z', Z)
-#     #算法
-# for t in range(1, n):
-#     xestimate = Xukf[:, t-1:t]
-#     P = P0
-#     cho = c * cholesky(P).T
-#     #取SIGMA点 将原来的预测值作为样本均值
-#     for k in range(0, L):
-#          xsP1[:, k:k+1] = xestimate + cho[:, k:k+1]
-#          xsP2[:, k:k+1] = xestimate - cho[:, k:k+1]
-#     print('xsP1', xsP1)
-#     print('xsP2', xsP1)
-    # for k in range(0, L-1):
-    #     sigma1 = np.hstack((xestimate, xsP1, xsP2))
-    #     Xsigmapre = A * sigma1
-    #     Xpred = zeros((6, 1))
-    # # 对SIGMA点进行非线性变换
-    # for K in range(0, 2*L+1):
-    #     #计算输出量的均值与方差  Xpred为均值
-    #   Xpred = Xpred + Xsigmapre[:, K]*Wm[K]
-    # Ppred = zeros((6, 6))
-    # for k in range(0, 2*L):
-    #     #Ppred为协方差
-    #      Ppred = Ppred + Wc[k] * (Xsigmapre[:, k] - Xpred)*(Xsigmapre[:, k] - Xpred).T
-    # Ppred = Ppred + G * Q * G.T
-    # chor = c * cholesky(Ppred).T
-    # for k in range(0, 2*L-1):
-    #      xsP11[:, k:k+1] = Xpred + chor[:, k:k+1]
-    #      xsP22[:, k:k+1] = Xpred - chor[:, k:k+1]
-    # #SIGMA2为非线性变换后的取值点
-    # sigma2 = np.hstack([Xpred, xsP11, xsP22])
-    # print('sigma2', sigma2)
-    # H = zeros([4, 2*L+1])
-    # for k in range(0, 2*L-2):
-    #     mid = sigma2[:, k]
-    #
-    #     # print('mid:', mid)
-    #     print('\n\n\n\n')
+plt.figure()
 
-        # ZS[:, k] =Z_pre(mid)
-
-# Zpred = 0
-    # for k in range(0, 2*L):
-    #     Zpred = Zpred + Wm[k] * ZS[:, k]
-    # Pzz = zeros((3, 3))
-    # for k in range(0, 2*L):
-    #     Pzz = Pzz + W[k] * (ZS[:, k] - Zpred)*(ZS[:, k] - Zpred).T
-    # Pzz = Pzz+r
-    # Pxz = zeros((6, 3))
-    # for k in range(0, 2*L):
-    #     Pxz = Pxz + Wc[k] * (sigma1[:, k] - Xpred)*(ZS[:, k] - Zpred).T
-    # K = Pxz * inv(Pzz)
-    # xestimate = Xpred+K*(Z[:, t]-Zpred)
-    # P = Ppred-K*Pzz*K.T
-    # P0 = P
-    # Xukf[:, t] = xestimate
-    #
+# plt.subplot(131)
+# plt.title('REAL')
+# plt.plot(X[0, :], X[1, :], 'b+')
+# plt.subplot(132)
+# plt.title('FILTER')
+# plt.plot(Xkf[0, :], Xkf[1, :], 'r+')
+# plt.subplot(133)
+# plt.title('IDEAL')
+# plt.plot(Z[0, :], Z[1, :], 'y+')
+plt.plot(X[0, :], X[1, :], 'b+')
+plt.plot(Xkf[0, :], Xkf[1, :], 'r+')
+plt.plot(Z[0, :], Z[1, :], 'g-')
+print(Xkf)
+plt.show()
