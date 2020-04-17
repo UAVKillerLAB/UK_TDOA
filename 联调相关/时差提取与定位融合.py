@@ -8,7 +8,7 @@ y = float(input('请输入坐标y：'))
 #z = float(input('请输入坐标z：'))
 
 c = 3.0e8
-a=0.0
+a = 0.0
 
 #此处为4站布站
 #P1 = [0,0,1]
@@ -57,7 +57,7 @@ print(t2)
 
 def wgn(x, snr):
     P_signal = np.sum(abs(x) ** 2) / len(x)
-    P_noise = P_signal / 10 ** (snr / 10.0)
+    P_noise = abs(P_signal / 10 ** (snr / 10.0))
     return np.random.randn(len(x)) * np.sqrt(P_noise)
 
 if __name__ == '__main__':

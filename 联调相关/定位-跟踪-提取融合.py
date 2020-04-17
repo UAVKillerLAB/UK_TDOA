@@ -16,11 +16,11 @@ T = list([
     [0, 0],
     [0, 0],
     ])
-for count range(0, 5, 1):
+for count in range(0, 5, 1):
 
     def wgn(x, snr):
         P_signal = np.sum(abs(x) ** 2) / len(x)
-        P_noise = P_signal / 10 ** (snr / 10.0)
+        P_noise = abs(P_signal / 10 ** (snr / 10.0))
         return np.random.randn(len(x)) * np.sqrt(P_noise)
 
     if __name__ == '__main__':

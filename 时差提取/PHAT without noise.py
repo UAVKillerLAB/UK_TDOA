@@ -1,11 +1,6 @@
 import numpy as np
 import os
 
-def wgn(x, snr):
-    P_signal = np.sum(abs(x) ** 2) / len(x)
-    P_noise = abs(P_signal / 10 ** (snr / 10.0))
-    return np.random.randn(len(x)) * np.sqrt(P_noise)
-
 if __name__ == '__main__':
     need = []
     filepath ='D:\信号.bin'
@@ -51,15 +46,9 @@ if __name__ == '__main__':
     x2 = np.array(x2)
     x3 = np.array(x3)
 
-    noise1 = wgn(x1, SNR)
-    s1 = x1 + noise1
-    noise2 = wgn(x2, SNR)
-    s2 = x2 + noise2
-    noise3 = wgn(x3, SNR)
-    s3 = x3 + noise3
-    X1 = np.fft.fft(s1, 2 * N - 1)  # 快速傅里叶正变换处理
-    X2 = np.fft.fft(s2, 2 * N - 1)
-    X3 = np.fft.fft(s3, 2 * N - 1)
+    X1 = np.fft.fft(x1, 2 * N - 1)  # 快速傅里叶正变换处理
+    X2 = np.fft.fft(x2, 2 * N - 1)
+    X3 = np.fft.fft(x3, 2 * N - 1)
     S12 = X1 * np.conj(X2)  # 取x1和x2的互相关函数
     S13 = X1 * np.conj(X3)
 
